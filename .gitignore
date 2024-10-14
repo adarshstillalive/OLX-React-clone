@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Constants
-src\utils\constants.tsx
+src/utils/constant.js
