@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { FcGoogle } from "react-icons/fc";
+import { LuSmartphone } from "react-icons/lu";
+import LoginEmailModal from './LoginEmailModal';
+import { useUser } from '../utils/userContext';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -6,58 +10,70 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
+  const {user, setUser} = useUser()
   if (!isOpen) return null;
+  const [loginEmail, setLoginEmail] = useState(false)
 
-  return (
+  const toggleLoginEmail = ()=>setLoginEmail(!loginEmail)
+
+  return !user && (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
       aria-labelledby="signupLabel"
       aria-modal="true"
       role="dialog"
     >
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+      <div className="bg-white rounded-sm shadow-lg w-96 p-6 relative">
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-black"
+          className="absolute top-2 right-2 text-3xl text-black"
           onClick={onClose}
         >
           ✕
         </button>
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold">SIGN UP</h1>
+        {!loginEmail && <><div className="text-center mb-6 flex flex-col items-center">
+          <div className="w-28 my-2">
+            <img alt="guitar image" src="https://statics.olx.in/external/base/img/loginEntryPointPost.webp" />
+          </div>
+          <div className="font-medium py-6">
+            Help us become one of the safest places to buy and sell
+          </div>
         </div>
-        <form className="space-y-4">
-          <input
-            type="text"
-            className="block w-full p-3 border rounded placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="First Name"
-          />
-          <input
-            type="text"
-            className="block w-full p-3 border rounded placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="Last Name"
-          />
-          <input
-            type="email"
-            className="block w-full p-3 border rounded placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="Email"
-          />
-          <input
-            type="text"
-            className="block w-full p-3 border rounded placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="Zipcode"
-          />
-          <input
-            type="password"
-            className="block w-full p-3 border rounded placeholder:text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            placeholder="Password"
-          />
+        <div className="space-y-4 flex flex-col items-center">
+
+          <button
+            className="w-full border-2 border-black font-semibold py-3 rounded hover:border-4 transition flex items-center justify-center space-x-2"
+          >
+            <LuSmartphone className="text-xl" />
+            <span>Continue with phone</span>
+          </button>
           <button
             type="submit"
-            className="w-full bg-yellow-400 text-black font-semibold py-3 rounded hover:bg-yellow-500 transition"
+            className="w-full border-2 text-black font-normal py-2 rounded hover:bg-slate-100 transition flex items-center justify-center space-x-2"
           >
-            Order up!
+            <FcGoogle className="text-xl" />
+            <span>Continue with Google</span>
           </button>
-        </form>
+
+          <h1 className="font-semibold text-sm">OR</h1>
+
+          <button
+            className="text-sm font-bold underline hover:no-underline"
+            onClick={toggleLoginEmail}
+          >
+            Login with Email
+          </button>
+          <div className="flex flex-col items-center pt-10 text-center">
+            <p className="text-xs my-2">
+              All your personal details are safe with us.
+            </p>
+            <p className="text-xs font-normal items-center">
+              If you continue, you are accepting <span className="text-blue-500 cursor-pointer">OLX Terms and Conditions and Privacy Policy</span>
+            </p>
+          </div>
+
+        </div></>
+        }
+        {loginEmail && <LoginEmailModal />}
       </div>
     </div>
   );

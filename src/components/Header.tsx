@@ -1,23 +1,24 @@
 import { FaAngleDown } from "react-icons/fa6";
 import { FaSearch, FaPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { LOGO_URL } from "../utils/constant";
 import Header2 from "./Header2";
 import LoginModal from "./LoginModal";
+import { useUser } from "../utils/userContext";
 
 const Navbar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const { user, setUser } = useUser();
 
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
-  const handleToggle = ()=>setIsModalOpen(!isModalOpen)
-  
+  const handleToggle = () => setIsModalOpen(!isModalOpen)
+
 
   return (
     <nav className="bg-slate-50 h-16 shadow-md border-2 border-white fixed w-full top-0 z-[999]">
       <div className="flex justify-between items-center w-full px-6">
-        
+
         <div className="flex items-center flex-1 gap-4">
 
           <div className="w-16 pt-2 h-16 mx-2">
@@ -65,9 +66,15 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
             <button
               className="text-lg font-semibold underline hover:no-underline"
-              onClick={()=>handleToggle()}
+              onClick={() => handleToggle()}
             >
-              Login
+              {user ? (
+                <span className="flex items-center gap-2">
+                  {user.name} <FaAngleDown />
+                </span>
+              ) : (
+                "Login"
+              )}
             </button>
 
             <button
@@ -83,7 +90,7 @@ const Navbar = () => {
       <Header2 />
       <LoginModal isOpen={isModalOpen} onClose={handleToggle} />
     </nav>
-    
+
   );
 };
 

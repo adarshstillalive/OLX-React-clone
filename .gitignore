@@ -24,4 +24,8 @@ dist-ssr
 *.sw?
 
 # Constants
-src/utils/constant.js
+src/utils/constant.tsx
+
+# firebase
+
+src/utils/firebase.tsx
