@@ -5,18 +5,30 @@ import { LOGO_URL } from "../utils/constant";
 import Header2 from "./Header2";
 import LoginModal from "./LoginModal";
 import { useUser } from "../utils/userContext";
+import ProfileCard from "./ProfileCard";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const { user, setUser } = useUser();
+  const [isProfileCardOpen, setIsProfileCardOpen] = useState(false)
+  const { user } = useUser();
 
-  const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
-  const handleToggle = () => setIsModalOpen(!isModalOpen)
+  const handleToggle = () => {
+    if(!user){
+    setIsModalOpen(!isModalOpen)
+    }else{
+      setIsProfileCardOpen(true)
+    }
+  }
+
+  const handleProCard = ()=>{
+    setIsProfileCardOpen(false)
+  }
 
 
   return (
-    <nav className="bg-slate-50 h-16 shadow-md border-2 border-white fixed w-full top-0 z-[999]">
+    <nav className="bg-slate-50 shadow-sm border-white fixed w-full top-0 z-[999]">
       <div className="flex justify-between items-center w-full px-6">
 
         <div className="flex items-center flex-1 gap-4">
@@ -25,6 +37,7 @@ const Navbar = () => {
             <div
               className="w-12 h-12 bg-center bg-cover filter brightness-0"
               style={{ backgroundImage: `url(${LOGO_URL})` }}
+              onClick={()=>navigate('/')}
             ></div>
           </div>
 
@@ -81,6 +94,7 @@ const Navbar = () => {
               className="px-4 py-1 border-4 font-semibold border-t-[#23E5DB] 
               border-r-[#3A77FF] border-l-[#FFCE32] border-b-[#3A77FF] 
               rounded-3xl shadow-xl flex items-center gap-2"
+              onClick={()=>navigate('/sell')}
             >
               <FaPlus /> SELL
             </button>
@@ -88,7 +102,9 @@ const Navbar = () => {
         </div>
       </div>
       <Header2 />
+      <div/>
       <LoginModal isOpen={isModalOpen} onClose={handleToggle} />
+      {isProfileCardOpen && <ProfileCard onClose2={handleProCard} />}
     </nav>
 
   );

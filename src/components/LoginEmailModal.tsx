@@ -1,13 +1,16 @@
-import { useEffect, useState, createContext } from 'react'
+import { useEffect, useState } from 'react'
 import { LOGO_URL } from '../utils/constant'
 import { checkEmail, checkPassword } from '../utils/validate';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../utils/firebase';
 import { useUser } from '../utils/userContext';
+import { useAds } from '../utils/adContext';
+import fetchUserAds from '../utils/fetchUserAds';
 
 
 
 const LoginEmailModal = () => {
+  const {ads, setAds} = useAds()
   const {user, setUser} = useUser()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,14 +21,16 @@ const LoginEmailModal = () => {
   if (checkEmailInFirebase) {
 
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async(userCredential) => {
         const name = "Tom"
-        setUser({name, email})
+        const {uid} = userCredential.user
+        setUser({uid, name, email})
+        const fetchAds =await fetchUserAds(uid)
+        
+        if(fetchAds)setAds(fetchAds)
         setCheckEmailInFirebase(false)
       })
       .catch((error) => {
-        // const errorCode = error.code;
-        const errorMessage = error.message;
         setErrorMessage('Invalid Credentials')
         console.log(error);
         setCheckEmailInFirebase(false)

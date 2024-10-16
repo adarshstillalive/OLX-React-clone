@@ -10,9 +10,10 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
-  const {user, setUser} = useUser()
-  if (!isOpen) return null;
   const [loginEmail, setLoginEmail] = useState(false)
+  const {user} = useUser()
+  if (!isOpen) return null;
+  
 
   const toggleLoginEmail = ()=>setLoginEmail(!loginEmail)
 
